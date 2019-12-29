@@ -32,15 +32,24 @@ class PlanController {
   }
 
   async update(req, res) {
-    const plans = await Plan.findOne(req.params.id);
+    const plans = await Plan.findByPk(req.params.id);
 
     const { title, duration, month_price } = await plans.update(req.body);
-
     return res.json({
       title,
       duration,
       month_price,
     });
+  }
+
+  async delete(req, res) {
+    const plan = await Plan.findByPk(req.params.id);
+
+    plan.canceled_at = new Date();
+    await plan.save();
+    await plan.destroy();
+
+    return res.send();
   }
 }
 

@@ -25,6 +25,10 @@ class StudentController {
       return res.status(401).json({ error: 'Validations fails' });
     }
 
+    function formatWeight(weight) {
+      return weight.toString(`${weight}`);
+    }
+
     const { name, age, height, weight, email } = req.body;
     const user_id = req.decoded;
     const data = {
@@ -45,6 +49,14 @@ class StudentController {
     const { name, email, age, height, weight } = await student.update(req.body);
 
     return res.json(student);
+  }
+
+  async delete(req, res) {
+    const deletedStudent = await Student.destroy({
+      where: { id: req.params.id },
+    });
+
+    return res.json({ deletedStudent });
   }
 }
 
